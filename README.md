@@ -1,2 +1,2 @@
 # Micromouse
-Repo for the codes for Micromouse
+Repo for the codes of Micromouse
