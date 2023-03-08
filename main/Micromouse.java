@@ -22,11 +22,13 @@ example maze:
 +---+---+---+---+---+ 
  */
     static int size = 5;
-    static boolean hwalls[][] = new boolean[size][size];
-    static int hwallsVal[][] = {{0,0}, {1,0}, {2,0}, {3,0}, {4,0}, {1,1}, {2,0}, {2,1}, {0,2}, {3,2}, {2,3}, {3,4}};
-    static boolean vwalls[][] = new boolean[size][size];
-    static int vwallsVal[][] = {{0,0}, {0,1}, {0,2}, {0,3}, {0,4}, {1,3}, {1,4}, {2,1}, {2,2}, {2,3}, {3,0}, {3,2}, {3,3}, {4,1}};
+    static boolean hwalls[][] = new boolean[size][size + 1];
+    static int hwallsVal[][] = {{0,0}, {1,0}, {2,0}, {3,0}, {4,0}, {1,1}, {2,0}, {2,1}, {0,2}, {3,2}, {2,3}, {3,4}, {0,5}, {1,5}, {2,5}, {3,5}, {4,5}};
+    static boolean vwalls[][] = new boolean[size + 1][size];
+    static int vwallsVal[][] = {{0,0}, {0,1}, {0,2}, {0,3}, {0,4}, {1,3}, {1,4}, {2,1}, {2,2}, {2,3}, {3,0}, {3,2}, {3,3}, {4,1}, {5,0}, {5,1}, {5,2}, {5,3}, {5,4}};
     static int dist[][] = new int[size][size];
+    static boolean hwallsVisit[][] = new boolean[size][size + 1];
+    static boolean vwallsVisit[][] = new boolean[size + 1][size];
     static boolean visited[][] = new boolean[size][size];
     static int posx, posy;
     static char dirs[] = {'N', 'E', 'S', 'W'};
@@ -67,50 +69,54 @@ example maze:
     }
 
     public static void printMatrix() {
-        for(int i = 0; i < size; i++) {
+        for(int i = 0; i <= size; i++) {
             System.out.print("+");
             for(int  j = 0; j < size; j++) {
                 System.out.print((hwalls[j][i] ? "---" : "   ") + "+");
             }
             System.out.println();
-            for(int  j = 0; j < size; j++) {
-                System.out.print((vwalls[j][i] ? "| " : "  ") + "" + dist[i][j]+" ");
+            if(i < size) {
+                for(int  j = 0; j <= size; j++) {
+                    System.out.print(vwalls[j][i] ? "| " : "  ");
+                    if(j < size) {
+                        System.out.print(dist[i][j]+" ");
+                    }
+                }
             }
-            System.out.println("|");
+            System.out.println();
         }
-        System.out.print("+");
-        for (int i = 0; i < size; i++) {
-            System.out.print("---+");
-        }
-        System.out.println();
     }
 
     static boolean checkNorthWall(Cell cell) {
-        return hwalls[cell.x][cell.y];
+        return hwallsVisit[cell.x][cell.y];
     }
 
     static boolean checkEastWall(Cell cell) {
-        return cell.x == size - 1 ? true : vwalls[cell.x + 1][cell.y];
+        return vwallsVisit[cell.x + 1][cell.y];
     }
 
     static boolean checkSouthWall(Cell cell) {
-        return cell.y == size - 1 ? true : hwalls[cell.x][cell.y + 1];
+        return hwallsVisit[cell.x][cell.y + 1];
     }
 
     static boolean checkWestWall(Cell cell) {
-        return vwalls[cell.x][cell.y];
+        return vwallsVisit[cell.x][cell.y];
     }
 
     static boolean checkLeftWall() {
         switch(dir) {
             case 'N':
-                return vwalls[posx][posy];
+                vwallsVisit[posx][posy] = vwalls[posx][posy];
+                return vwallsVisit[posx][posy];
             case 'E':
-                return hwalls[posx][posy];
+                hwallsVisit[posx][posy] = hwalls[posx][posy];
+                return hwallsVisit[posx][posy];
             case 'S':
-                return posx == size - 1 ? true : vwalls[posx + 1][posy];
+                vwallsVisit[posx + 1][posy] = vwalls[posx + 1][posy];
+                return vwallsVisit[posx + 1][posy];
             case 'W':
-                return posy == size - 1 ? true : hwalls[posx][posy + 1];
+                hwallsVisit[posx][posy + 1] = hwalls[posx][posy + 1];
+                return hwallsVisit[posx][posy + 1];
             default :
                 return false;
         }
@@ -119,13 +125,17 @@ example maze:
     static boolean checkRightWall() {
         switch(dir) {
             case 'N':
-                return posx == size - 1 ? true : vwalls[posx + 1][posy];
+                vwallsVisit[posx + 1][posy] = vwalls[posx + 1][posy];
+                return vwallsVisit[posx + 1][posy];
             case 'E':
-                return posy == size - 1 ? true : hwalls[posx][posy + 1];
+                hwallsVisit[posx][posy + 1] = hwalls[posx][posy + 1];
+                return hwallsVisit[posx][posy + 1];
             case 'S':
-                return vwalls[posx][posy];
+                vwallsVisit[posx][posy] = vwalls[posx][posy];
+                return vwallsVisit[posx][posy];
             case 'W':
-                return hwalls[posx][posy];
+                vwallsVisit[posx][posy] = vwalls[posx][posy];
+                return hwallsVisit[posx][posy];
             default :
                 return false;
         }
@@ -134,12 +144,16 @@ example maze:
     static boolean checkFrontWall() {
         switch(dir) {
             case 'N':
-                return hwalls[posx][posy];
+                hwallsVisit[posx][posy] = hwalls[posx][posy];
+                return hwallsVisit[posx][posy];
             case 'E':
-                return posx == size - 1 ? true : vwalls[posx + 1][posy];
+                vwallsVisit[posx + 1][posy] = vwalls[posx + 1][posy];
+                return vwalls[posx + 1][posy];
             case 'S':
-                return posy == size - 1 ? true : hwalls[posx][posy + 1];
+                hwallsVisit[posx][posy + 1] = hwalls[posx][posy + 1];
+                return hwallsVisit[posx][posy + 1];
             case 'W':
+                vwallsVisit[posx][posy] = vwalls[posx][posy];
                 return vwalls[posx][posy];
             default :
                 return false;
@@ -154,7 +168,7 @@ example maze:
         Cell retCell = new Cell(-1, -1, false);
         int leastDist = Integer.MAX_VALUE;
         if(cell.x < size - 1) { //E
-            if(dist[cell.y][cell.x + 1] < dist[cell.y][cell.x] && !vwalls[cell.x + 1][cell.y] && dist[cell.y][cell.x + 1] < leastDist) {
+            if(dist[cell.y][cell.x + 1] < dist[cell.y][cell.x] && !vwallsVisit[cell.x + 1][cell.y] && dist[cell.y][cell.x + 1] < leastDist) {
                 retCell.res = true;
                 retCell.x = cell.x + 1;
                 retCell.y = cell.y;
@@ -162,7 +176,7 @@ example maze:
             }
         }
         if(cell.x > 0) { //W
-            if(dist[cell.y][cell.x - 1] < dist[cell.y][cell.x] && !vwalls[cell.x][cell.y] && dist[cell.y][cell.x - 1] < leastDist) {
+            if(dist[cell.y][cell.x - 1] < dist[cell.y][cell.x] && !vwallsVisit[cell.x][cell.y] && dist[cell.y][cell.x - 1] < leastDist) {
                 retCell.res = true;
                 retCell.x = cell.x - 1;
                 retCell.y = cell.y;
@@ -170,7 +184,7 @@ example maze:
             }
         }
         if(cell.y < size - 1) { //S
-            if(dist[cell.y + 1][cell.x] < dist[cell.y][cell.x] && !hwalls[cell.x][cell.y + 1] && dist[cell.y + 1][cell.x] < leastDist) {
+            if(dist[cell.y + 1][cell.x] < dist[cell.y][cell.x] && !hwallsVisit[cell.x][cell.y + 1] && dist[cell.y + 1][cell.x] < leastDist) {
                 retCell.res = true;
                 retCell.x = cell.x;
                 retCell.y = cell.y + 1;
@@ -178,7 +192,7 @@ example maze:
             }
         }
         if(cell.y > 0) { //N
-            if(dist[cell.y - 1][cell.x] < dist[cell.y][cell.x] && !hwalls[cell.x][cell.y] && dist[cell.y - 1][cell.x] < leastDist) {
+            if(dist[cell.y - 1][cell.x] < dist[cell.y][cell.x] && !hwallsVisit[cell.x][cell.y] && dist[cell.y - 1][cell.x] < leastDist) {
                 retCell.res = true;
                 retCell.x = cell.x;
                 retCell.y = cell.y - 1;
@@ -192,28 +206,28 @@ example maze:
         Cell retCell = new Cell(-1, -1, false);
         int leastDist = Integer.MAX_VALUE;
         if(cell.x < size - 1) { //E
-            if(!vwalls[cell.x + 1][cell.y] && dist[cell.y][cell.x + 1] < leastDist) {
+            if(!vwallsVisit[cell.x + 1][cell.y] && dist[cell.y][cell.x + 1] < leastDist) {
                 retCell.x = cell.x + 1;
                 retCell.y = cell.y;
                 leastDist = dist[cell.y][cell.x + 1];
             }
         }
         if(cell.x > 0) { //W
-            if(!vwalls[cell.x][cell.y] && dist[cell.y][cell.x - 1] < leastDist) {
+            if(!vwallsVisit[cell.x][cell.y] && dist[cell.y][cell.x - 1] < leastDist) {
                 retCell.x = cell.x - 1;
                 retCell.y = cell.y;
                 leastDist = dist[cell.y][cell.x - 1];
             }
         }
         if(cell.y < size - 1) { //S
-            if(!hwalls[cell.x][cell.y + 1] && dist[cell.y + 1][cell.x] < leastDist) {
+            if(!hwallsVisit[cell.x][cell.y + 1] && dist[cell.y + 1][cell.x] < leastDist) {
                 retCell.x = cell.x;
                 retCell.y = cell.y + 1;
                 leastDist = dist[cell.y + 1][cell.x];
             }
         }
         if(cell.y > 0) { //N
-            if(!hwalls[cell.x][cell.y] && dist[cell.y - 1][cell.x] < leastDist) {
+            if(!hwallsVisit[cell.x][cell.y] && dist[cell.y - 1][cell.x] < leastDist) {
                 retCell.x = cell.x;
                 retCell.y = cell.y - 1;
                 leastDist = dist[cell.y - 1][cell.x];
@@ -342,19 +356,6 @@ example maze:
             if(lesserCell.res){
                 //move to the least available neighbour
                 gotoNeighbourCell(lesserCell);
-                System.out.println("in lesserAvailableNeighbour().res true");
-                // if(!checkFrontWall()) {
-                //     System.out.println("going front");
-                //     goAhead(1);
-                // } else if(!checkRightWall()) {
-                //     System.out.println("going right");
-                //     turnRight();
-                //     goAhead(1);
-                // } else if(!checkLeftWall()) {
-                //     System.out.println("going left");
-                //     turnLeft();
-                //     goAhead(1);
-                // }
             } else {
                 System.out.println("Renumbering...");
                 Queue<Cell> queue = new ArrayDeque<>();
