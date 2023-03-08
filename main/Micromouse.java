@@ -49,17 +49,6 @@ public class Micromouse {
         goal = false;
     }
 
-    public static void printDist() {
-
-        for(int i = 0; i < dist.length; i++) {
-            for(int j = 0; j < dist[i].length; j++) {
-                System.out.print(dist[i][j] + " ");
-            }
-            System.out.println();
-        }
-
-    }
-
     public static void printMatrix() {
         for(int i = 0; i < size; i++) {
             System.out.print("+ ");
@@ -222,7 +211,7 @@ public class Micromouse {
                     goAhead(1);
                 }
             } else {
-                System.out.println("Renumbering");
+                System.out.println("Renumbering...");
                 //renumber
                 Queue<Cell> queue = new ArrayDeque<>();
                 queue.add(new Cell(posx, posy));
