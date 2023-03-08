@@ -343,18 +343,6 @@ example maze:
                 //move to the least available neighbour
                 gotoNeighbourCell(lesserCell);
                 System.out.println("in lesserAvailableNeighbour().res true");
-                // if(!checkFrontWall()) {
-                //     System.out.println("going front");
-                //     goAhead(1);
-                // } else if(!checkRightWall()) {
-                //     System.out.println("going right");
-                //     turnRight();
-                //     goAhead(1);
-                // } else if(!checkLeftWall()) {
-                //     System.out.println("going left");
-                //     turnLeft();
-                //     goAhead(1);
-                // }
             } else {
                 System.out.println("Renumbering...");
                 Queue<Cell> queue = new ArrayDeque<>();
