@@ -8,6 +8,7 @@ import java.util.Queue;
  */
 public class Micromouse {
 /*
+example maze:
 +---+---+---+---+---+
 | 4   3   2 | 3   4 |
 +   +---+---+   +   +
@@ -151,35 +152,36 @@ public class Micromouse {
      */
     public static Cell lesserAvailableNeighbourCell(Cell cell) {
         Cell retCell = new Cell(-1, -1, false);
+        int leastDist = Integer.MAX_VALUE;
         if(cell.x < size - 1) { //E
-            if(dist[cell.y][cell.x + 1] < dist[cell.y][cell.x] && !vwalls[cell.x + 1][cell.y]) {
+            if(dist[cell.y][cell.x + 1] < dist[cell.y][cell.x] && !vwalls[cell.x + 1][cell.y] && dist[cell.y][cell.x + 1] < leastDist) {
                 retCell.res = true;
-                retCell.x = cell.x;
+                retCell.x = cell.x + 1;
                 retCell.y = cell.y;
                 return retCell;
             }
         }
         if(cell.x > 0) { //W
-            if(dist[cell.y][cell.x - 1] < dist[cell.y][cell.x] && !vwalls[cell.x][cell.y]) {
+            if(dist[cell.y][cell.x - 1] < dist[cell.y][cell.x] && !vwalls[cell.x][cell.y] && dist[cell.y][cell.x - 1] < leastDist) {
                 retCell.res = true;
-                retCell.x = cell.x;
+                retCell.x = cell.x - 1;
                 retCell.y = cell.y;
                 return retCell;
             }
         }
         if(cell.y < size - 1) { //S
-            if(dist[cell.y + 1][cell.x] < dist[cell.y][cell.x] && !hwalls[cell.x][cell.y + 1]) {
+            if(dist[cell.y + 1][cell.x] < dist[cell.y][cell.x] && !hwalls[cell.x][cell.y + 1] && dist[cell.y + 1][cell.x] < leastDist) {
                 retCell.res = true;
                 retCell.x = cell.x;
-                retCell.y = cell.y;
+                retCell.y = cell.y + 1;
                 return retCell;
             }
         }
         if(cell.y > 0) { //N
-            if(dist[cell.y - 1][cell.x] < dist[cell.y][cell.x] && !hwalls[cell.x][cell.y]) {
+            if(dist[cell.y - 1][cell.x] < dist[cell.y][cell.x] && !hwalls[cell.x][cell.y] && dist[cell.y - 1][cell.x] < leastDist) {
                 retCell.res = true;
                 retCell.x = cell.x;
-                retCell.y = cell.y;
+                retCell.y = cell.y - 1;
                 return retCell;
             }
         }
@@ -188,30 +190,30 @@ public class Micromouse {
 
     public static Cell leastAvailableNeighbourCell(Cell cell) {
         Cell retCell = new Cell(-1, -1, false);
-        int leastDist = size;
+        int leastDist = Integer.MAX_VALUE;
         if(cell.x < size - 1) { //E
-            if(!vwalls[posx + 1][posy] && dist[cell.y][cell.x + 1] < leastDist) {
+            if(!vwalls[cell.x + 1][cell.y] && dist[cell.y][cell.x + 1] < leastDist) {
                 retCell.x = cell.x + 1;
                 retCell.y = cell.y;
                 leastDist = dist[cell.y][cell.x + 1];
             }
         }
         if(cell.x > 0) { //W
-            if(!vwalls[posx][posy] && dist[cell.y][cell.x - 1] < leastDist) {
+            if(!vwalls[cell.x][cell.y] && dist[cell.y][cell.x - 1] < leastDist) {
                 retCell.x = cell.x - 1;
                 retCell.y = cell.y;
                 leastDist = dist[cell.y][cell.x - 1];
             }
         }
         if(cell.y < size - 1) { //S
-            if(!hwalls[posx][posy + 1] && dist[cell.y + 1][cell.x] < leastDist) {
+            if(!hwalls[cell.x][cell.y + 1] && dist[cell.y + 1][cell.x] < leastDist) {
                 retCell.x = cell.x;
                 retCell.y = cell.y + 1;
                 leastDist = dist[cell.y + 1][cell.x];
             }
         }
         if(cell.y > 0) { //N
-            if(!hwalls[posx][posy] && dist[cell.y - 1][cell.x] < leastDist) {
+            if(!hwalls[cell.x][cell.y] && dist[cell.y - 1][cell.x] < leastDist) {
                 retCell.x = cell.x;
                 retCell.y = cell.y - 1;
                 leastDist = dist[cell.y - 1][cell.x];
@@ -238,6 +240,80 @@ public class Micromouse {
         }
     }
 
+    public static void turnAround() {
+        for(int i = 0; i < dirs.length; i++) {
+            if(dirs[i] == dir) {
+                dir = dirs[(i + 2) % dirs.length];
+                break;
+            }
+        }
+    }
+
+    public static void gotoNeighbourCell(Cell cell) {
+        if(cell.x < posx) { //W
+            switch(dir) {
+                case 'N':
+                    turnLeft();
+                    break;
+                case 'E':
+                    turnAround();
+                    break;
+                case 'S':
+                    turnRight();
+                    break;
+                case 'W':
+                    break;
+            }
+            goAhead(1);
+        } else if(cell.x > posx) { //E
+            switch(dir) {
+                case 'N':
+                    turnRight();
+                    break;
+                case 'E':
+                    break;
+                case 'S':
+                    turnLeft();
+                    break;
+                case 'W':
+                    turnAround();
+                    break;
+            }
+            goAhead(1);
+        } else if(cell.y < posy) { //N
+            switch(dir) {
+                case 'N':
+                    break;
+                case 'E':
+                    turnLeft();
+                    break;
+                case 'S':
+                    turnAround();
+                    break;
+                case 'W':
+                    turnRight();
+                    break;
+            }
+            goAhead(1);
+
+        } else if(cell.y > posy) { //S
+            switch(dir) {
+                case 'N':
+                    turnAround();
+                    break;
+                case 'E':
+                    turnRight();
+                    break;
+                case 'S':
+                    break;
+                case 'W':
+                    turnLeft();
+                    break;
+            }
+            goAhead(1);
+        }
+    }
+
     public static void goAhead(int i) {
         switch(dir) {
             case 'N':
@@ -261,20 +337,24 @@ public class Micromouse {
         while(!goal) {
             System.out.println("At " + posx + "," + posy);
             System.out.println("dir: " + dir);
-            if(lesserAvailableNeighbourCell(new Cell(posx, posy)).res){
-                System.out.println("in LessAvailableNeighbour().res true");
-                if(!checkFrontWall()) {
-                    System.out.println("going front");
-                    goAhead(1);
-                } else if(!checkRightWall()) {
-                    System.out.println("going right");
-                    turnRight();
-                    goAhead(1);
-                } else if(!checkLeftWall()) {
-                    System.out.println("going left");
-                    turnLeft();
-                    goAhead(1);
-                }
+            Cell lesserCell = lesserAvailableNeighbourCell(new Cell(posx, posy));
+            System.out.println("lesserCell: "+lesserCell.x+","+lesserCell.y);
+            if(lesserCell.res){
+                //move to the least available neighbour
+                gotoNeighbourCell(lesserCell);
+                System.out.println("in lesserAvailableNeighbour().res true");
+                // if(!checkFrontWall()) {
+                //     System.out.println("going front");
+                //     goAhead(1);
+                // } else if(!checkRightWall()) {
+                //     System.out.println("going right");
+                //     turnRight();
+                //     goAhead(1);
+                // } else if(!checkLeftWall()) {
+                //     System.out.println("going left");
+                //     turnLeft();
+                //     goAhead(1);
+                // }
             } else {
                 System.out.println("Renumbering...");
                 Queue<Cell> queue = new ArrayDeque<>();
@@ -287,14 +367,22 @@ public class Micromouse {
                         Cell leastCell = leastAvailableNeighbourCell(currCell);
                         System.out.println("leastCell: "+leastCell.x+","+leastCell.y);
                         dist[currCell.y][currCell.x] = dist[leastCell.y][leastCell.x] + 1;
+                        printMatrix();
                         if(!checkNorthWall(currCell)) {
-                            queue.add(new Cell(posx, posy - 1));
-                        } else if(!checkEastWall(currCell)) {
-                            queue.add(new Cell(posx + 1, posy));
-                        } else if(!checkSouthWall(currCell)) {
-                            queue.add(new Cell(posx, posy + 1));
-                        } else if(!checkWestWall(currCell)) {
-                            queue.add(new Cell(posx - 1, posy));
+                            queue.add(new Cell(currCell.x, currCell.y - 1));
+                            System.out.println("N");
+                        }
+                        if(!checkEastWall(currCell)) {
+                            queue.add(new Cell(currCell.x + 1, currCell.y));
+                            System.out.println("E");
+                        }
+                        if(!checkSouthWall(currCell)) {
+                            queue.add(new Cell(currCell.x, currCell.y + 1));
+                            System.out.println("S");
+                        }
+                        if(!checkWestWall(currCell)) {
+                            queue.add(new Cell(currCell.x - 1, currCell.y));
+                            System.out.println("W");
                         }
                     }
                 }
