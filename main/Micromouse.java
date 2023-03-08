@@ -7,12 +7,24 @@ import java.util.Queue;
  * Micromouse
  */
 public class Micromouse {
-
+/*
++---+---+---+---+---+
+| 4   3   2 | 3   4 |
++   +---+---+   +   +
+| 3   2 | 1   2 | 3 |
++---+   +   +---+   +
+| 2   1 | 0 | 1   2 |
++   +   +---+   +   +
+| 3 | 2 | 1 | 2   3 |
++   +   +   +---+   +
+| 4 | 3   2   3   4 |
++---+---+---+---+---+ 
+ */
     static int size = 5;
     static boolean hwalls[][] = new boolean[size][size];
-    static int hwallsVal[][] = {{0,0}, {0,1}, {0,2}, {0,3}, {0,4}, {1,1}, {1,2}, {2,0}, {2,3}, {3,2}, {4,3}};
+    static int hwallsVal[][] = {{0,0}, {1,0}, {2,0}, {3,0}, {4,0}, {1,1}, {2,0}, {0,2}, {3,2}, {2,3}, {3,4}};
     static boolean vwalls[][] = new boolean[size][size];
-    static int vwallsVal[][] = {{0,0}, {1,0}, {2,0}, {3,0}, {4,0}, {3,1}, {4,1}, {1,2}, {2,2}, {3,2}, {0,3}, {2,3}, {3,3}, {1,4}};
+    static int vwallsVal[][] = {{0,0}, {0,1}, {0,2}, {0,3}, {0,4}, {1,3}, {1,4}, {2,1}, {2,2}, {2,3}, {3,0}, {3,2}, {3,3}, {4,1}};
     static int dist[][] = new int[size][size];
     static boolean visited[][] = new boolean[size][size];
     static int posx, posy;
@@ -43,27 +55,27 @@ public class Micromouse {
 
         dir = 'N';
 
-        posx = size - 1;
-        posy = 0;
+        posx = 0;
+        posy = size - 1;
 
         goal = false;
     }
 
     public static void printMatrix() {
         for(int i = 0; i < size; i++) {
-            System.out.print("+ ");
+            System.out.print("+");
             for(int  j = 0; j < size; j++) {
-                System.out.print((hwalls[i][j] ? "--" : "  ") + "+ ");
+                System.out.print((hwalls[j][i] ? "---" : "   ") + "+");
             }
             System.out.println();
             for(int  j = 0; j < size; j++) {
-                System.out.print((vwalls[i][j] ? "| " : "  ") + "" + dist[i][j]+" ");
+                System.out.print((vwalls[j][i] ? "| " : "  ") + "" + dist[i][j]+" ");
             }
             System.out.println("|");
         }
-        System.out.print("+ ");
+        System.out.print("+");
         for (int i = 0; i < size; i++) {
-            System.out.print("--+ ");
+            System.out.print("---+");
         }
         System.out.println();
     }
@@ -102,9 +114,9 @@ public class Micromouse {
     static boolean checkRightWall() {
         switch(dir) {
             case 'N':
-                return posx == size - 1 ? true : hwalls[posx + 1][posy];
+                return posx == size - 1 ? true : vwalls[posx + 1][posy];
             case 'E':
-                return posy == size - 1 ? true : vwalls[posx][posy + 1];
+                return posy == size - 1 ? true : hwalls[posx][posy + 1];
             case 'S':
                 return vwalls[posx][posy];
             case 'W':
@@ -132,29 +144,36 @@ public class Micromouse {
 
     public static Cell LessAvailableNeighbour() {
         Cell cell = new Cell(-1, -1, false);
-        if(posx < size - 1) {
-            if(dist[posx + 1][posy] < dist[posx][posy] && vwalls[posx + 1][posy]) {
+        if(posx < size - 1) { //E
+            if(dist[posy][posx + 1] < dist[posy][posx] && !vwalls[posx + 1][posy]) {
                 cell.res = true;
                 cell.x = posx;
                 cell.y = posy;
+                return cell;
             }
-        } else if(posx > 0) {
-            if(dist[posx - 1][posy] < dist[posx][posy] && hwalls[posx - 1][posy]) {
+        }
+        if(posx > 0) { //W
+            if(dist[posy][posx - 1] < dist[posy][posx] && !vwalls[posx][posy]) {
                 cell.res = true;
                 cell.x = posx;
                 cell.y = posy;
+                return cell;
             }
-        } else if(posy < size - 1) {
-            if(dist[posx][posy + 1] < dist[posx][posy] && vwalls[posx][posy + 1]) {
+        }
+        if(posy < size - 1) { //S
+            if(dist[posy + 1][posx] < dist[posy][posx] && !hwalls[posx][posy + 1]) {
                 cell.res = true;
                 cell.x = posx;
                 cell.y = posy;
+                return cell;
             }
-        } else if(posy > 0) {
-            if(dist[posx][posy - 1] < dist[posx][posy] && vwalls[posx][posy - 1]) {
+        }
+        if(posy > 0) { //N
+            if(dist[posy - 1][posx] < dist[posy][posx] && !hwalls[posx][posy]) {
                 cell.res = true;
                 cell.x = posx;
                 cell.y = posy;
+                return cell;
             }
         }
         return cell;
@@ -195,18 +214,22 @@ public class Micromouse {
         }
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         setup();
         printMatrix();
         while(!goal) {
             System.out.println("At " + posx + "," + posy);
             if(LessAvailableNeighbour().res){
+                System.out.println("in LessAvailableNeighbour().res true");
                 if(!checkFrontWall()) {
+                    System.out.println("going front");
                     goAhead(1);
                 } else if(!checkRightWall()) {
+                    System.out.println("going right");
                     turnRight();
                     goAhead(1);
                 } else if(!checkLeftWall()) {
+                    System.out.println("going left");
                     turnLeft();
                     goAhead(1);
                 }
@@ -218,8 +241,8 @@ public class Micromouse {
                 while(!queue.isEmpty()) {
                     Cell currCell = queue.remove();
                     Cell lessCell = LessAvailableNeighbour();
-                    if(!lessCell.res) {
-                        dist[currCell.x][currCell.y] = dist[lessCell.x][lessCell.y] + 1;
+                    if(lessCell.res) {
+                        dist[currCell.y][currCell.x] = dist[lessCell.y][lessCell.x] + 1;
                         if(!checkNorthWall(currCell)) {
                             queue.add(new Cell(posx, posy - 1));
                         } else if(!checkEastWall(currCell)) {
@@ -232,6 +255,7 @@ public class Micromouse {
                     }
                 }
                 printMatrix();
+                Thread.sleep(1000);
             }
         }
     }
