@@ -3,7 +3,7 @@ package main;
 public class Cell {
 
     public int x, y;
-    boolean res;
+    boolean res, N, E, S, W;
 
     public Cell(int x, int y) {
         this.x = x;
