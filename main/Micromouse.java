@@ -87,19 +87,6 @@ example maze:
                 }
             }
         }
-        // if(size % 2 == 0) {
-        //     for(int i = 0; i < size/2; i++) {
-        //         for(int j = 0; j < size/2; j++) {
-        //             dist[size/2 + i][size/2 + j] = dist[size/2 - 1 - i][size/2 + j] = dist[size/2 + i][size/2 - 1 - j] = dist[size/2 - 1 - i][size/2 - 1 - j] = i + j;
-        //         }
-        //     }
-        // } else {
-        //     for(int i = 0; i < size/2 + 1; i++) {
-        //         for(int j = 0; j < size/2 + 1; j++) {
-        //             dist[size/2 + i][size/2 + j] = dist[size/2 - i][size/2 + j] = dist[size/2 + i][size/2 - j] = dist[size/2 - i][size/2 - j] = i + j;
-        //         }
-        //     }
-        // }
 
         dir = 'N';
         dirOffInd = 0;
@@ -606,34 +593,26 @@ example maze:
                 queue.add(new Cell(posx, posy));
                 while(!queue.isEmpty()) {
                     Cell currCell = queue.remove();
-                    // System.out.println("currCell: "+currCell.x+","+currCell.y);
                     Cell lessCell = lesserAvailableNeighbourCell(currCell);
                     if(!lessCell.res) {
                         Cell leastCell = leastAvailableNeighbourCell(currCell);
-                        // System.out.println("leastCell: "+leastCell.x+","+leastCell.y);
                         dist[currCell.y][currCell.x] = dist[leastCell.y][leastCell.x] + 1;
                         if(!checkNorthWall(currCell)) {
                             queue.add(new Cell(currCell.x, currCell.y - 1));
-                            // System.out.println("N");
                         }
                         if(!checkEastWall(currCell)) {
                             queue.add(new Cell(currCell.x + 1, currCell.y));
-                            // System.out.println("E");
                         }
                         if(!checkSouthWall(currCell)) {
                             queue.add(new Cell(currCell.x, currCell.y + 1));
-                            // System.out.println("S");
                         }
                         if(!checkWestWall(currCell)) {
                             queue.add(new Cell(currCell.x - 1, currCell.y));
-                            // System.out.println("W");
                         }
                     }
                 }
                 // printMatrix();
-                // Thread.sleep(500);
             }
-            // Thread.sleep(100);
             if(posx == target.x && posy == target.y) {
                 goal = true;
                 // stack.add(new Cell(posx, posy));
