@@ -117,19 +117,6 @@ example maze:
                 }
             }
         }
-        // if(size % 2 == 0) {
-        //     for(int i = 0; i < size/2; i++) {
-        //         for(int j = 0; j < size/2; j++) {
-        //             dist[size/2 + i][size/2 + j] = dist[size/2 - 1 - i][size/2 + j] = dist[size/2 + i][size/2 - 1 - j] = dist[size/2 - 1 - i][size/2 - 1 - j] = i + j;
-        //         }
-        //     }
-        // } else {
-        //     for(int i = 0; i < size/2 + 1; i++) {
-        //         for(int j = 0; j < size/2 + 1; j++) {
-        //             dist[size/2 + i][size/2 + j] = dist[size/2 - i][size/2 + j] = dist[size/2 + i][size/2 - j] = dist[size/2 - i][size/2 - j] = i + j;
-        //         }
-        //     }
-        // }
 
         dir = 'N';
         dirOffInd = 0;
@@ -730,9 +717,8 @@ example maze:
                 //     }
                 // }
                 // printMatrix();
-                // // Thread.sleep(500);
+                // Thread.sleep(500);
             }
-            // Thread.sleep(100);
             if(posx == target.x && posy == target.y) {
                 goal = true;
                 // stack.add(new Cell(posx, posy));
