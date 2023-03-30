@@ -2,7 +2,7 @@ package main;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.Stack;
+// import java.util.Stack;
 
 /**
  * Micromouse
@@ -26,37 +26,67 @@ example maze:
     static boolean hwalls[][] = new boolean[size][size + 1];
     // static int hwallsVal[][] = {{1,1}, {2,0}, {0,2}, {3,2}, {2,3}, {3,4}}; //removed 2,1
     // static int vwallsVal[][] = {{1,3}, {1,4}, {2,1}, {2,2}, {2,3}, {3,0}, {3,2}, {3,3}, {4,1}};
-    static int hwallsVal[][] = {{1,1}, {2,1}, {8,1}, {9,1}, {11,1}, {12,1}, {13,1}, {14,1},
-                                {1,2}, {3,2}, {8,2}, {10,2}, {13,2},
-                                {0,3}, {2,3}, {7,3}, {9,3}, {11,3}, {12,3}, {14,3},
-                                {1,4}, {2,4}, {8,4}, {10,4}, {12,4}, {13,4}, {15,4},
-                                {2,5}, {3,5}, {7,5}, {9,5}, {13,5}, {14,5},
-                                {1,6}, {2,6}, {5,6}, {9,6},
-                                {2,7}, {6,7}, {7,7}, {8,7}, {11,7}, {13,7}, {14,7}, {15,7},
-                                {3,8}, {5,8}, {9,8}, {10,8}, {11,8}, {12,8}, {14,8},
-                                {0,9}, {2,9}, {5,9}, {6,9}, {7,9}, {8,9}, {11,9}, {13,9}, {15,9},
-                                {1,10}, {2,10}, {3,10}, {4,10}, {6,10}, {9,10}, {12,10}, {14,10},
-                                {1,11}, {2,11}, {4,11}, {6,11}, {7,11}, {8,11}, {12,11}, {13,11}, {14,11},
-                                {3,12}, {5,12}, {11,12}, {12,12}, {13,12}, {14,12}, {15,12},
-                                {1,13}, {2,13}, {4,13}, {9,13}, {10,13}, {11,13}, {12,13}, {13,13}, {14,13},
-                                {3,14}, {5,14}, {9,14}, {11,14}, {12,14}, {13,14}, {14,14}, {15,14},
-                                {2,15}, {4,15}, {9,15}, {10,15}, {11,15}, {12,15}, {13,15}, {14,15}};
-    static int vwallsVal[][] = {{4,0}, {7,0},
-                                {2,1}, {4,1}, {5,1}, {6,1}, {7,1}, {10,1}, {11,1}, {12,1}, {15,1},
-                                {2,2}, {4,2}, {5,2}, {7,2}, {8,2}, {10,2}, {13,2},
-                                {2,3}, {4,3}, {5,3}, {6,3}, {7,3}, {9,3}, {11,3}, {14,3},
-                                {1,4}, {4,4}, {5,4}, {6,4}, {8,4}, {10,4}, {11,4}, {12,4}, {15,4},
-                                {1,5}, {4,5}, {5,5}, {7,5}, {8,5}, {11,5}, {12,5}, {13,5}, {14,5}, {15,5},
-                                {1,6}, {3,6}, {4,6}, {6,6}, {7,6}, {9,6}, {10,6}, {11,6},
-                                {2,7}, {4,7}, {5,7}, {7,7}, {12,7},
-                                {1,8}, {2,8}, {4,8}, {7,8}, {9,8}, {10,8}, {13,8},
-                                {3,9}, {5,9}, {7,9}, {11,9}, {12,9}, {14,9},
-                                {7,10,}, {8,10}, {10,10}, {11,10}, {13,10},
-                                {1,11}, {3,11}, {5,11}, {7,11}, {9,11}, {11,11},
-                                {2,12}, {4,12}, {6,12}, {7,12}, {8,12}, {9,12}, {10,12},
-                                {1,13}, {3,13}, {5,13}, {7,13}, {8,13}, {9,13},
-                                {1,14}, {2,14}, {4,14}, {6,14}, {7,14}, {8,14}, {9,14},
-                                {1,15}, {8,15}};
+    // static int hwallsVal[][] = {{1,1}, {2,1}, {8,1}, {9,1}, {11,1}, {12,1}, {13,1}, {14,1},
+    //                             {1,2}, {3,2}, {8,2}, {10,2}, {13,2},
+    //                             {0,3}, {2,3}, {7,3}, {9,3}, {11,3}, {12,3}, {14,3},
+    //                             {1,4}, {2,4}, {8,4}, {10,4}, {12,4}, {13,4}, {15,4},
+    //                             {2,5}, {3,5}, {7,5}, {9,5}, {13,5}, {14,5},
+    //                             {1,6}, {2,6}, {5,6}, {9,6},
+    //                             {2,7}, {6,7}, {7,7}, {8,7}, {11,7}, {13,7}, {14,7}, {15,7},
+    //                             {3,8}, {5,8}, {9,8}, {10,8}, {11,8}, {12,8}, {14,8},
+    //                             {0,9}, {2,9}, {5,9}, {6,9}, {7,9}, {8,9}, {11,9}, {13,9}, {15,9},
+    //                             {1,10}, {2,10}, {3,10}, {4,10}, {6,10}, {9,10}, {12,10}, {14,10},
+    //                             {1,11}, {2,11}, {4,11}, {6,11}, {7,11}, {8,11}, {12,11}, {13,11}, {14,11},
+    //                             {3,12}, {5,12}, {11,12}, {12,12}, {13,12}, {14,12}, {15,12},
+    //                             {1,13}, {2,13}, {4,13}, {9,13}, {10,13}, {11,13}, {12,13}, {13,13}, {14,13},
+    //                             {3,14}, {5,14}, {9,14}, {11,14}, {12,14}, {13,14}, {14,14}, {15,14},
+    //                             {2,15}, {4,15}, {9,15}, {10,15}, {11,15}, {12,15}, {13,15}, {14,15}};
+    // static int vwallsVal[][] = {{4,0}, {7,0},
+    //                             {2,1}, {4,1}, {5,1}, {6,1}, {7,1}, {10,1}, {11,1}, {12,1}, {15,1},
+    //                             {2,2}, {4,2}, {5,2}, {7,2}, {8,2}, {10,2}, {13,2},
+    //                             {2,3}, {4,3}, {5,3}, {6,3}, {7,3}, {9,3}, {11,3}, {14,3},
+    //                             {1,4}, {4,4}, {5,4}, {6,4}, {8,4}, {10,4}, {11,4}, {12,4}, {15,4},
+    //                             {1,5}, {4,5}, {5,5}, {7,5}, {8,5}, {11,5}, {12,5}, {13,5}, {14,5}, {15,5},
+    //                             {1,6}, {3,6}, {4,6}, {6,6}, {7,6}, {9,6}, {10,6}, {11,6},
+    //                             {2,7}, {4,7}, {5,7}, {7,7}, {12,7},
+    //                             {1,8}, {2,8}, {4,8}, {7,8}, {9,8}, {10,8}, {13,8},
+    //                             {3,9}, {5,9}, {7,9}, {11,9}, {12,9}, {14,9},
+    //                             {7,10,}, {8,10}, {10,10}, {11,10}, {13,10},
+    //                             {1,11}, {3,11}, {5,11}, {7,11}, {9,11}, {11,11},
+    //                             {2,12}, {4,12}, {6,12}, {7,12}, {8,12}, {9,12}, {10,12},
+    //                             {1,13}, {3,13}, {5,13}, {7,13}, {8,13}, {9,13},
+    //                             {1,14}, {2,14}, {4,14}, {6,14}, {7,14}, {8,14}, {9,14},
+    //                             {1,15}, {8,15}};
+    static int hwallsVal[][] = {{1,1}, {2,1}, {3,1}, {4,1}, {5,1}, {6,1}, {7,1}, {8,1}, {9,1}, {10,1}, {11,1}, {12,1}, {12,1}, {13,1}, {14,1},
+                                {6,2}, {7,2}, {8,2}, {9,2}, {10,2}, {11,2}, {13,2},
+                                {2,3}, {3,3}, {4,3}, {12,4}, {14,4},
+                                {1,4}, {2,4}, {3,4}, {11,4}, {13,4},
+                                {0,5}, {1,5}, {4,5}, {7,5}, {8,5}, {9,5}, {10,5}, {12,5},
+                                {9,6}, {11,6}, {12,6}, {13,6},
+                                {3,7}, {6,7}, {7,7}, {8,7}, {10,7}, {11,7},
+                                {2,8}, {4,8}, {10,8},
+                                {1,9}, {3,9}, {7,9}, {8,9}, {9,9}, {11,9},
+                                {0,10}, {2,10}, {7,10}, {8,10}, {9,10}, {10,10},
+                                {0,11}, {2,11}, {6,11}, {7,11}, {8,11}, {9,11}, {10,11}, {11,11}, {13,11},
+                                {0,12}, {2,12}, {6,12}, {7,12}, {8,12}, {9,12}, {12,12}, {14,12},
+                                {0,13}, {2,13}, {5,13}, {7,13}, {13,13},
+                                {1,14}, {2,14}, {3,14}, {4,14}, {6,14}, {8,14}, {9,14}, {10,14}, {12,14},
+                                {6,15}, {7,15}, {8,15}, {9,15}, {10,15}, {12,15}};
+    static int vwallsVal[][] = {{1,1}, {1,3}, {1,6}, {1,7}, {1,8}, {1,15},
+                                {2,2}, {2,5}, {2,6}, {2,8}, {2,14},
+                                {3,1}, {3,4}, {3,4}, {3,5}, {3,7}, {3,9}, {3,10}, {3,11}, {3,12}, {3,15},
+                                {4,2}, {4,6}, {4,8}, {4,10}, {4,11}, {4,12}, {4,13}, {4,14},
+                                {5,1}, {5,3}, {5,4}, {5,5}, {5,6}, {5,7}, {5,8}, {5,9}, {5,10}, {5,11}, {5,12}, {5,15},
+                                {6,2}, {6,3}, {6,4}, {6,5}, {6,6}, {6,7}, {6,8}, {6,9}, {6,10}, {6,12}, {6,14},
+                                {7,2}, {7,4}, {7,6}, {7,7},
+                                {8,3}, {8,5}, {8,13},
+                                {9,2}, {9,4}, {9,6}, {9,7}, {9,8}, {9,12},
+                                {10,3}, {10,8}, {10,13},
+                                {11,2}, {11,4}, {11,5}, {11,12},
+                                {12,3}, {12,8}, {12,9}, {12,11}, {12,13},
+                                {13,2}, {13,4}, {13,7}, {13,8}, {13,9}, {13,10}, {13,11}, {13,12},
+                                {14,3}, {14,5}, {14,6}, {14,7}, {14,8}, {14,9}, {14,13}, {14,14}, {14,15},
+                                {15,2}, {15,3}, {15,4}, {15,5}, {15,6}, {15,7}, {15,8}, {15,9}, {15,10}, {15,11}, {15,12}, {15,13}, {15,14}};
     static boolean vwalls[][] = new boolean[size + 1][size];
     static int dist[][] = new int[size][size];
     static boolean hwallsVisit[][] = new boolean[size][size + 1];
@@ -123,6 +153,28 @@ example maze:
                     System.out.print(vwalls[j][i] ? "| " : "  ");
                     if(j < size) {
                         System.out.print("  ");
+                    }
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public static void printMazeVisited() {
+        for(int i = 0; i <= size; i++) {
+            System.out.print("+");
+            for(int  j = 0; j < size; j++) {
+                System.out.print((hwalls[j][i] ? "---" : "   ") + "+");
+            }
+            System.out.println();
+            if(i < size) {
+                for(int  j = 0; j <= size; j++) {
+                    System.out.print(vwalls[j][i] ? "| " : "  ");
+                    if(j < size) {
+                        if(visited[j][i])
+                            System.out.print("* ");
+                        else
+                            System.out.print("  ");
                     }
                 }
             }
@@ -269,6 +321,7 @@ example maze:
         checkRightWall();
     }
 
+    //returns non visited 
     public static Cell lesserAvailableNeighbourCell() {
         Cell retCell = new Cell(-1, -1, false);
         Cell tempCell = getFrontCell();
@@ -534,15 +587,15 @@ example maze:
         }
     }
 
-    public static void floodFillWithWalls() {
+    public static void floodFillWithWalls(Cell targetCell) {
         for(int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 dist[j][i] = Integer.MAX_VALUE;
             }
         }
         Queue<Cell> queue = new ArrayDeque<>();
-        queue.add(center);
-        dist[center.y][center.x] = 0;
+        queue.add(new Cell(targetCell.x, targetCell.y));
+        dist[targetCell.y][targetCell.x] = 0;
         while(!queue.isEmpty()) {
             Cell currCell = queue.remove();
             int newDist = dist[currCell.y][currCell.x] + 1;
@@ -552,7 +605,7 @@ example maze:
                     queue.add(new Cell(currCell.x, currCell.y - 1));
                 }
             }
-            if(!checkEastWall(currCell)) { //E
+            if(!checkEastWall(currCell)){ //E
                 if(dist[currCell.y][currCell.x + 1] > newDist) {
                     dist[currCell.y][currCell.x + 1] = newDist;
                     queue.add(new Cell(currCell.x + 1, currCell.y));
@@ -574,15 +627,57 @@ example maze:
         }
 
     }
+    
+    public static void floodFillWithWallsVisited(Cell targetCell) {
+        for(int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                dist[j][i] = 99;
+            }
+        }
+        Queue<Cell> queue = new ArrayDeque<>();
+        queue.add(targetCell);
+        dist[targetCell.y][ targetCell.x] = 0;
+        while(!queue.isEmpty()) {
+            Cell currCell = queue.remove();
+            int newDist = dist[currCell.y][currCell.x] + 1;
+            if(!checkNorthWall(currCell) && visited[currCell.x][currCell.y - 1]) { //N
+                if(dist[currCell.y - 1][currCell.x] > newDist) {
+                    dist[currCell.y - 1][currCell.x] = newDist;
+                    queue.add(new Cell(currCell.x, currCell.y - 1));
+                }
+            }
+            if(!checkEastWall(currCell) && visited[currCell.x + 1][currCell.y]) { //E
+                if(dist[currCell.y][currCell.x + 1] > newDist) {
+                    dist[currCell.y][currCell.x + 1] = newDist;
+                    queue.add(new Cell(currCell.x + 1, currCell.y));
+                }
+            }
+            if(!checkSouthWall(currCell) && visited[currCell.x][currCell.y + 1]) { //S
+                if(dist[currCell.y + 1][currCell.x] > newDist) {
+                    dist[currCell.y + 1][currCell.x] = newDist;
+                    queue.add(new Cell(currCell.x, currCell.y + 1));
+                }
+            }
+            if(!checkWestWall(currCell) && visited[currCell.x - 1][currCell.y]) { //W
+                if(dist[currCell.y][currCell.x - 1] > newDist) {
+                    dist[currCell.y][currCell.x - 1] = newDist;
+                    queue.add(new Cell(currCell.x - 1, currCell.y));
+                }
+            }
+            
+        }
 
-    public static void searchTo(Cell targetCell) {
+    }
+
+
+    public static void searchTo(Cell targetCell) throws InterruptedException {
         
         target = new Cell(targetCell.x, targetCell.y);
         floodfill(targetCell);
-        printMatrix();
+        // printMatrix();
         // Stack<Cell> stack = new Stack<>();
         boolean goal = false;
-        boolean visited[][] = new boolean[size][size];
+        // boolean visited[][] = new boolean[size][size];
         while(!goal) {
             System.out.println("At " + posx + "," + posy + "dir:" + dir + " " + (visited[posx][posy] ? "Already visited" : "Not Visited"));
             if(!visited[posx][posy]) {
@@ -595,43 +690,47 @@ example maze:
                 // }
             }
             printMatrix();
+            Thread.sleep(200);
             Cell lesserCell = lesserAvailableNeighbourCell();
             // System.out.println("lesserCell: "+lesserCell.x+","+lesserCell.y);
             if(lesserCell.res){
                 //move to the least available neighbour
+                //while coming back to the origin, first check if there is a non visited neighbour. If present,
+                //prioritize going to it.
                 gotoNeighbourCell(lesserCell);
             } else {
                 System.out.println("Renumbering...");
-                Queue<Cell> queue = new ArrayDeque<>();
-                queue.add(new Cell(posx, posy));
-                while(!queue.isEmpty()) {
-                    Cell currCell = queue.remove();
-                    // System.out.println("currCell: "+currCell.x+","+currCell.y);
-                    Cell lessCell = lesserAvailableNeighbourCell(currCell);
-                    if(!lessCell.res) {
-                        Cell leastCell = leastAvailableNeighbourCell(currCell);
-                        // System.out.println("leastCell: "+leastCell.x+","+leastCell.y);
-                        dist[currCell.y][currCell.x] = dist[leastCell.y][leastCell.x] + 1;
-                        if(!checkNorthWall(currCell)) {
-                            queue.add(new Cell(currCell.x, currCell.y - 1));
-                            // System.out.println("N");
-                        }
-                        if(!checkEastWall(currCell)) {
-                            queue.add(new Cell(currCell.x + 1, currCell.y));
-                            // System.out.println("E");
-                        }
-                        if(!checkSouthWall(currCell)) {
-                            queue.add(new Cell(currCell.x, currCell.y + 1));
-                            // System.out.println("S");
-                        }
-                        if(!checkWestWall(currCell)) {
-                            queue.add(new Cell(currCell.x - 1, currCell.y));
-                            // System.out.println("W");
-                        }
-                    }
-                }
+                floodFillWithWalls(targetCell);
+                // Queue<Cell> queue = new ArrayDeque<>();
+                // queue.add(new Cell(posx, posy));
+                // while(!queue.isEmpty()) {
+                //     Cell currCell = queue.remove();
+                //     // System.out.println("currCell: "+currCell.x+","+currCell.y);
+                //     Cell lessCell = lesserAvailableNeighbourCell(currCell);
+                //     if(!lessCell.res) {
+                //         Cell leastCell = leastAvailableNeighbourCell(currCell);
+                //         // System.out.println("leastCell: "+leastCell.x+","+leastCell.y);
+                //         dist[currCell.y][currCell.x] = dist[leastCell.y][leastCell.x] + 1;
+                //         if(!checkNorthWall(currCell)) {
+                //             queue.add(new Cell(currCell.x, currCell.y - 1));
+                //             // System.out.println("N");
+                //         }
+                //         if(!checkEastWall(currCell)) {
+                //             queue.add(new Cell(currCell.x + 1, currCell.y));
+                //             // System.out.println("E");
+                //         }
+                //         if(!checkSouthWall(currCell)) {
+                //             queue.add(new Cell(currCell.x, currCell.y + 1));
+                //             // System.out.println("S");
+                //         }
+                //         if(!checkWestWall(currCell)) {
+                //             queue.add(new Cell(currCell.x - 1, currCell.y));
+                //             // System.out.println("W");
+                //         }
+                //     }
+                // }
                 // printMatrix();
-                // Thread.sleep(500);
+                // // Thread.sleep(500);
             }
             // Thread.sleep(100);
             if(posx == target.x && posy == target.y) {
@@ -639,17 +738,17 @@ example maze:
                 // stack.add(new Cell(posx, posy));
             }
         }
-        printMatrix();
+        // printMatrix();
     }
     
     public static void main(String[] args) throws InterruptedException {
         setup();
-        printMaze();
         searchTo(center);
         System.out.println("Reached!, now going back.");
         searchTo(origin);
-        floodFillWithWalls();
+        floodFillWithWallsVisited(center);
         printMatrix();
+        printMazeVisited();
     }
 
 }
